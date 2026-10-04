@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harari P2P Exchange</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #121214;
+            color: #ffffff;
+            margin: 0;
+            padding: 15px;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #2b2c33;
+            color: #8e8e93;
+        }
+        .tab-btn.active-buy {
+            background-color: #0ecb81;
+            color: #ffffff;
+        }
+        .tab-btn.active-sell {
+            background-color: #f6465d;
+            color: #ffffff;
+        }
+        .p2p-card {
+            background-color: #1e1f25;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .merchant-name {
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .rate {
+            color: #8e8e93;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        .limit {
+            font-size: 12px;
+            color: #8e8e93;
+        }
+        .badge {
+            background-color: #2b2c33;
+            color: #0ecb81;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        .action-btn {
+            background-color: #0ecb81;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active-buy" id="buyTab" onclick="switchTab('buy')">Buy</button>
+        <button class="tab-btn" id="sellTab" onclick="switchTab('sell')">Sell</button>
+    </div>
+
+    <div id="ordersList">
+        <div class="p2p-card">
+            <div>
+                <div class="merchant-name">
+                    Teke_94 <span class="badge">94.3%</span>
+                </div>
+                <div class="rate">644 orders</div>
+                <div class="price">194.00 <small style="font-size:12px;">ETB</small></div>
+                <div class="limit">Limit: 580.00 - 1,486.04 ETB</div>
+                <div class="limit" style="color:#f0b90b; margin-top:3px;">Telebirr | CBE</div>
+            </div>
+            <button class="action-btn" onclick="trade('Teke_94', 194.00)">Buy</button>
+        </div>
+
+        <div class="p2p-card">
+            <div>
+                <div class="merchant-name">
+                    AA_HH <span class="badge">100%</span>
+                </div>
+                <div class="rate">178 orders</div>
+                <div class="price">194.35 <small style="font-size:12px;">ETB</small></div>
+                <div class="limit">Limit: 200.00 - 1,821.05 ETB</div>
+                <div class="limit" style="color:#f0b90b; margin-top:3px;">Telebirr</div>
+            </div>
+            <button class="action-btn" onclick="trade('AA_HH', 194.35)">Buy</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function switchTab(type) {
+            const buyTab = document.getElementById('buyTab');
+            const sellTab = document.getElementById('sellTab');
+            if (type === 'buy') {
+                buyTab.className = 'tab-btn active-buy';
+                sellTab.className = 'tab-btn';
+            } else {
+                sellTab.className = 'tab-btn active-sell';
+                buyTab.className = 'tab-btn';
+            }
+        }
+
+        function trade(merchant, price) {
+            tg.sendData(JSON.stringify({ merchant: merchant, price: price }));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
