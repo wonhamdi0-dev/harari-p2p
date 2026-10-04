@@ -1,215 +1,343 @@
-<!DOCTYPE html>
+     <!DOCTYPE html>
 <html lang="am">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harari P2P Exchange</title>
+  <title>Harari P2P</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-color: #121212;
-      --card-bg: #1e1e1e;
-      --accent-green: #00e676;
-      --accent-red: #ff5252;
+      --bg-main: #12151c;
+      --card-bg: #1e222d;
+      --accent-green: #00c076;
+      --accent-red: #ff4d4d;
       --text-main: #ffffff;
-      --text-sub: #a0a0a0;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      margin: 0;
-      padding: 16px;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .header h2 {
-      margin: 0;
-      color: var(--accent-green);
-    }
-    .rates-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 16px;
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      border: 1px solid #333;
-    }
-    .rate-box {
-      text-align: center;
-    }
-    .rate-title {
-      font-size: 12px;
-      color: var(--text-sub);
-    }
-    .rate-val {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 4px;
-    }
-    .buy-val { color: var(--accent-green); }
-    .sell-val { color: var(--accent-red); }
-
-    .tab-container {
-      display: flex;
-      background: var(--card-bg);
-      border-radius: 8px;
-      margin-bottom: 16px;
-      padding: 4px;
-    }
-    .tab {
-      flex: 1;
-      padding: 10px;
-      text-align: center;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .tab.active-buy {
-      background: var(--accent-green);
-      color: #000;
-    }
-    .tab.active-sell {
-      background: var(--accent-red);
-      color: #fff;
+      --text-sub: #848e9c;
+      --border-color: #2b313a;
+      --badge-bg: #2b313a;
     }
 
-    .form-group {
-      margin-bottom: 16px;
-    }
-    label {
-      display: block;
-      font-size: 12px;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
-    input, select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background: var(--card-bg);
-      color: #fff;
+    * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      padding-bottom: 70px;
+    }
+
+    /* Top Bar */
+    .top-header {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .top-header h2 {
+      font-size: 18px;
+    }
+    .top-header p {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    /* Buy / Sell Tabs */
+    .trade-type-toggle {
+      display: flex;
+      padding: 12px 16px;
+      gap: 10px;
+    }
+    .type-btn {
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-sub);
+    }
+    .type-btn.active-buy {
+      background-color: var(--accent-green);
+      color: #fff;
+    }
+    .type-btn.active-sell {
+      background-color: var(--accent-red);
+      color: #fff;
+    }
+
+    /* Ad List */
+    .ads-container {
+      padding: 0 16px;
+    }
+
+    .ad-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .user-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #f0b90b;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       font-size: 14px;
     }
-    button {
-      width: 100%;
-      padding: 14px;
-      border-radius: 8px;
-      border: none;
-      background: var(--accent-green);
-      color: #000;
+
+    .username {
+      font-size: 14px;
       font-weight: bold;
-      font-size: 16px;
+    }
+
+    .user-stats {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .action-btn {
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
       cursor: pointer;
+      font-size: 13px;
+    }
+
+    .buy-btn {
+      background-color: var(--accent-green);
+      color: #fff;
+    }
+
+    .sell-btn {
+      background-color: var(--accent-red);
+      color: #fff;
+    }
+
+    .ad-details {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .detail-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+
+    .limit-val {
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .payment-tags {
+      display: flex;
+      gap: 6px;
       margin-top: 10px;
+    }
+
+    .badge {
+      background-color: var(--badge-bg);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      color: var(--text-sub);
+      border-left: 3px solid #f0b90b;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: var(--card-bg);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 10px;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      color: #f0b90b;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      margin-bottom: 2px;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h2>Harari P2P</h2>
-    <p style="font-size: 12px; color: var(--text-sub);">Crypto & Fiat Exchange</p>
-  </div>
-
-  <div class="rates-card">
-    <div class="rate-box">
-      <div class="rate-title">እንገዛለን (Buy Rate)</div>
-      <div class="rate-val buy-val">152.00 ETB</div>
-    </div>
-    <div class="rate-box">
-      <div class="rate-title">እንሸጣለን (Sell Rate)</div>
-      <div class="rate-val sell-val">155.00 ETB</div>
+  <div class="top-header">
+    <div>
+      <h2>Harari P2P</h2>
+      <p>Trade USDT with local currency</p>
     </div>
   </div>
 
-  <div class="tab-container">
-    <div id="buyTab" class="tab active-buy" onclick="switchTab('buy')">መግዛት (Buy)</div>
-    <div id="sellTab" class="tab" onclick="switchTab('sell')">መሸጥ (Sell)</div>
+  <div class="trade-type-toggle">
+    <button id="buyToggle" class="type-btn active-buy" onclick="switchMode('buy')">Buy</button>
+    <button id="sellToggle" class="type-btn" onclick="switchMode('sell')">Sell</button>
   </div>
 
-  <form id="p2pForm">
-    <div class="form-group">
-      <label id="amountLabel">የ USDT መጠን masukkan:</label>
-      <input type="number" id="usdtAmount" placeholder="ለምሳሌ: 100" required oninput="calculateTotal()">
+  <div class="ads-container" id="adsList">
+    <!-- Ad Card 1 -->
+    <div class="ad-card">
+      <div class="user-info">
+        <div class="user-left">
+          <div class="avatar">T</div>
+          <div>
+            <div class="username">Teke_94 🥉</div>
+            <div class="user-stats">★ 94.5% | 644 orders</div>
+          </div>
+        </div>
+        <button class="action-btn buy-btn" onclick="openOrder('Teke_94', 194.00)">Buy</button>
+      </div>
+
+      <div class="ad-details">
+        <div class="detail-col">
+          <span class="label">PRICE</span>
+          <span class="price">194.00 <small style="font-size: 11px;">ETB</small></span>
+        </div>
+        <div class="detail-col" style="text-align: right;">
+          <span class="label">LIMIT</span>
+          <span class="limit-val">580.00 - 1,486.04 ETB</span>
+        </div>
+      </div>
+
+      <div class="payment-tags">
+        <span class="badge">Telebirr</span>
+        <span class="badge">CBE Birr</span>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>አጠቃላይ በብር (ETB):</label>
-      <input type="text" id="etbAmount" readonly placeholder="0.00 ETB">
-    </div>
+    <!-- Ad Card 2 -->
+    <div class="ad-card">
+      <div class="user-info">
+        <div class="user-left">
+          <div class="avatar" style="background:#00c076; color:#fff;">A</div>
+          <div>
+            <div class="username">AA_HH ⚙️</div>
+            <div class="user-stats">★ 100% | 178 orders</div>
+          </div>
+        </div>
+        <button class="action-btn buy-btn" onclick="openOrder('AA_HH', 194.35)">Buy</button>
+      </div>
 
-    <div class="form-group">
-      <label>የክፍያ መንገድ (Payment Method):</label>
-      <select id="paymentMethod">
-        <option value="Telebirr">Telebirr</option>
-        <option value="CBE">CBE (ንግድ ባንክ)</option>
-        <option value="Bank of Abyssinia">Bank of Abyssinia</option>
-      </select>
-    </div>
+      <div class="ad-details">
+        <div class="detail-col">
+          <span class="label">PRICE</span>
+          <span class="price">194.35 <small style="font-size: 11px;">ETB</small></span>
+        </div>
+        <div class="detail-col" style="text-align: right;">
+          <span class="label">LIMIT</span>
+          <span class="limit-val">200.00 - 1,821.05 ETB</span>
+        </div>
+      </div>
 
-    <button type="button" id="submitBtn" onclick="submitOrder()">ትዕዛዝ ላክ (Submit Order)</button>
-  </form>
+      <div class="payment-tags">
+        <span class="badge">Telebirr</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <span>Home</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">📄</div>
+      <span>Orders</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">📢</div>
+      <span>Ads</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">👛</div>
+      <span>Wallet</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">•••</div>
+      <span>More</span>
+    </div>
+  </div>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    let currentMode = 'buy';
-    const buyRate = 155.00; // ተጠቃሚው ሲገዛ የሚሰላበት ተመን
-    const sellRate = 152.00; // ተጠቃሚው ሲሸጥ የሚሰላበት ተመን
-
-    function switchTab(mode) {
-      currentMode = mode;
-      const buyTab = document.getElementById('buyTab');
-      const sellTab = document.getElementById('sellTab');
-      const submitBtn = document.getElementById('submitBtn');
-
-      if (mode === 'buy') {
-        buyTab.className = 'tab active-buy';
-        sellTab.className = 'tab';
-        submitBtn.style.background = 'var(--accent-green)';
-        submitBtn.style.color = '#000';
+    function switchMode(mode) {
+      const buyBtn = document.getElementById('buyToggle');
+      const sellBtn = document.getElementById('sellToggle');
+      
+      if(mode === 'buy') {
+        buyBtn.className = 'type-btn active-buy';
+        sellBtn.className = 'type-btn';
       } else {
-        sellTab.className = 'tab active-sell';
-        buyTab.className = 'tab';
-        submitBtn.style.background = 'var(--accent-red)';
-        submitBtn.style.color = '#fff';
+        sellBtn.className = 'type-btn active-sell';
+        buyBtn.className = 'type-btn';
       }
-      calculateTotal();
     }
 
-    function calculateTotal() {
-      const usdt = parseFloat(document.getElementById('usdtAmount').value) || 0;
-      const rate = currentMode === 'buy' ? buyRate : sellRate;
-      const total = usdt * rate;
-      document.getElementById('etbAmount').value = total.toFixed(2) + ' ETB';
-    }
-
-    function submitOrder() {
-      const usdt = document.getElementById('usdtAmount').value;
-      const etb = document.getElementById('etbAmount').value;
-      const method = document.getElementById('paymentMethod').value;
-
-      if (!usdt || usdt <= 0) {
-        alert('እባክዎን ትክክለኛ የ USDT መጠን ያስገቡ!');
-        return;
-      }
-
-      const orderData = {
-        type: currentMode.toUpperCase(),
-        usdtAmount: usdt,
-        etbAmount: etb,
-        paymentMethod: method
-      };
-
-      tg.sendData(JSON.stringify(orderData));
-      tg.close();
+    function openOrder(merchant, price) {
+      tg.sendData(JSON.stringify({
+        action: "INITIATE_TRADE",
+        merchant: merchant,
+        price: price
+      }));
     }
   </script>
 </body>
