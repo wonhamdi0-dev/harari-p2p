@@ -1,33 +1,130 @@
-  <!-- 5. MORE TAB -->
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethio P2P Exchange</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg-main: #12151c;
+      --card-bg: #1e222d;
+      --accent-yellow: #f0b90b;
+      --accent-green: #00c076;
+      --accent-red: #ff4d4d;
+      --text-main: #ffffff;
+      --text-sub: #848e9c;
+      --border-color: #2b313a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); padding-bottom: 75px; }
+    .tab-content { display: none; padding: 16px; }
+    .tab-content.active { display: block; }
+    .card { background-color: var(--card-bg); border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border-color); }
+    .btn-yellow { background-color: var(--accent-yellow); color: #000; font-weight: bold; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; }
+    .menu-item { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--card-bg); border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border-color); cursor: pointer; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background-color: var(--card-bg); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border-color); z-index: 99; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-sub); cursor: pointer; width: 20%; }
+    .nav-item.active { color: var(--accent-yellow); }
+  </style>
+</head>
+<body>
+
+  <!-- HOME TAB -->
+  <div id="tab-home" class="tab-content active">
+    <h3>Marketplace</h3>
+    <br>
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong>Teke_94 🥉</strong>
+          <div style="font-size: 11px; color: var(--text-sub);">94.5% | 644 orders</div>
+        </div>
+        <button style="background: var(--accent-green); color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:bold;" onclick="sendOrder('BUY', 194.00)">Buy</button>
+      </div>
+      <div style="margin-top: 12px; display:flex; justify-content:space-between;">
+        <div>
+          <div style="font-size: 10px; color: var(--text-sub);">PRICE</div>
+          <div style="font-size: 16px; font-weight:bold;">194.00 ETB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDERS TAB -->
+  <div id="tab-orders" class="tab-content">
+    <h3>Orders</h3>
+    <br>
+    <p style="color: var(--text-sub);">ምንም ንቁ ትእዛዝ የለም።</p>
+  </div>
+
+  <!-- ADS TAB -->
+  <div id="tab-ads" class="tab-content">
+    <h3>My Ads</h3>
+    <br>
+    <p style="color: var(--text-sub);">ምንም የወጣ ማስታወቂያ የለም።</p>
+  </div>
+
+  <!-- WALLET TAB -->
+  <div id="tab-wallet" class="tab-content">
+    <h3>Wallet Balance</h3>
+    <br>
+    <div class="card">
+      <div style="font-size: 12px; color: var(--text-sub);">የአሁኑ ባላንስ</div>
+      <h2 style="margin-top: 5px;">$0.00 USDT</h2>
+    </div>
+  </div>
+
+  <!-- MORE TAB -->
   <div id="tab-more" class="tab-content">
     <h3>More Options</h3>
     <br>
-    <div class="menu-item" onclick="openMenu('profile')">
+    <div class="menu-item" onclick="openOption('Profile')">
       👤 <div><strong>View Profile</strong><div style="font-size:11px; color:var(--text-sub);">See your account details</div></div>
     </div>
-    <div class="menu-item" onclick="openMenu('payment')">
+    <div class="menu-item" onclick="openOption('Payment Accounts')">
       💳 <div><strong>Payment Accounts</strong><div style="font-size:11px; color:var(--text-sub);">Manage Telebirr, Banks</div></div>
     </div>
-    <div class="menu-item" onclick="openMenu('referral')">
+    <div class="menu-item" onclick="openOption('Referral Program')">
       🎁 <div><strong>Referral Program</strong><div style="font-size:11px; color:var(--text-sub);">Invite friends and earn rewards</div></div>
     </div>
-    <div class="menu-item" onclick="openMenu('support')">
+    <div class="menu-item" onclick="openOption('Contact Support')">
       🎧 <div><strong>Contact Support</strong><div style="font-size:11px; color:var(--text-sub);">Get help from our team</div></div>
     </div>
   </div>
-    function openMenu(option) {
-      if (option === 'profile') {
-        const user = tg.initDataUnsafe?.user;
-        const name = user ? user.first_name : "User";
-        const id = user ? user.id : "N/A";
-        alert(`👤 User Profile\n\nName: ${name}\nTelegram ID: ${id}`);
-      } else if (option === 'payment') {
-        alert("💳 Payment Accounts\n\n- Telebirr\n- CBE Bank\n- BOA Bank\n\n(Account setup feature under maintenance)");
-      } else if (option === 'referral') {
-        const user = tg.initDataUnsafe?.user;
-        const refLink = `https://t.me/EthioP2PBot?start=${user ? user.id : 'ref'}`;
-        alert(`🎁 Referral Program\n\nYour Referral Link:\n${refLink}`);
-      } else if (option === 'support') {
-        tg.openTelegramLink("https://t.me/your_support_username"); // እዚህ ጋር የSupport አካውንትህ ይገባል
-      }
+
+  <!-- BOTTOM NAVIGATION BAR -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('home')">🏠<span>Home</span></div>
+    <div class="nav-item" onclick="switchTab('orders')">📄<span>Orders</span></div>
+    <div class="nav-item" onclick="switchTab('ads')">📢<span>Ads</span></div>
+    <div class="nav-item" onclick="switchTab('wallet')">👛<span>Wallet</span></div>
+    <div class="nav-item" onclick="switchTab('more')">•••<span>More</span></div>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      const navIndex = ['home', 'orders', 'ads', 'wallet', 'more'].indexOf(tabName);
+      document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
     }
+
+    function openOption(title) {
+      alert(`${title} ገጽ በቅርብ ቀን ሙሉ በሙሉ ስራ ይጀምራል!`);
+    }
+
+    function sendOrder(type, price) {
+      tg.sendData(JSON.stringify({
+        action: type,
+        price: price
+      }));
+    }
+  </script>
+</body>
+</html>
